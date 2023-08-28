@@ -54,6 +54,6 @@ root.left.right = TreeNode(5)
 root.right.right = TreeNode(6)
 
 # Test the function with the sample tree
-Solution().inOrderTraversal(root)
+Solution().preOrderTraversal(root)
 print()
     
