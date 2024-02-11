@@ -22,6 +22,6 @@ class Solution:
                     rightSide = node
                     q.append(node.left)
                     q.append(node.right)
-            if rightSide:
+            if rightSide != None:
                 res.append(rightSide.val)
         return res

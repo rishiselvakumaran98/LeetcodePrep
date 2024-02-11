@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 
@@ -105,8 +106,36 @@ public class Top_K_Frequent {
         return result.stream().mapToInt(a -> a).toArray(); // Convert the ArrayList to int[] array
     }
 
-
-
-
-
+    public int[] topKFrequent_TreeMap(int[] nums, int k) {
+        // First we compute the frequencies of the number in the nums array into a hashMap
+        Map <Integer, Integer> freqMap = new HashMap<>();
+        for (int n: nums){
+            freqMap.put(n, freqMap.getOrDefault(n, 0)+1);
+        }
+        // Second we take the frequencies for the number and append it the number to it as freq -> number in a HashMap
+        TreeMap<Integer, List<Integer>> numfreqMap = new TreeMap<>();
+        // 
+        for (Map.Entry<Integer, Integer> entry: freqMap.entrySet()){
+            int num = entry.getKey();
+            int freq = entry.getValue();
+            numfreqMap.computeIfAbsent(freq, l -> new ArrayList<>()).add(num);
+        }
+        // Lastly sort the Array and take K elements and return the elements in an array
+        List<Integer> retArr = new ArrayList<>();
+        int count = 0;
+        while (count < k) {
+            Map.Entry<Integer, List<Integer>> entry = numfreqMap.pollLastEntry();
+            if (entry == null){
+                break;
+            }
+            for (int i: entry.getValue()){
+                retArr.add(i);
+                count++;
+            }
+            if (count == k){
+                break;
+            }
+        }
+        return retArr.stream().mapToInt(i -> i).toArray();
+    }
 }

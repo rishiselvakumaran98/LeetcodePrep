@@ -26,6 +26,9 @@ class Solution:
         prev.next = ls1 if ls1 else ls2
         return prehead.next
     
+    
+    
+    
     def mergeTwoListsRR(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         # recursive way --> Time: O(n), Space: O(n)
 

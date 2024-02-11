@@ -2,27 +2,22 @@ package Two_Pointers;
 
 public class ValidPalindrome {
     public boolean isPalindrome(String s) {
-        char left_char, right_char;
-        char[] string_char = s.toLowerCase().toCharArray();
-        int left = 0;
-        int right = string_char.length-1;
-        while (left < right){
-            left_char = string_char[left];
-            right_char = string_char[right];
-            if(!Character.isLetterOrDigit(left_char)) {
-                left++;
+        int l =0, r = s.length()-1;
+        while (l <= r){
+            // if the left character is not alphanumeric then increment left
+            if (!Character.isLetterOrDigit(s.charAt(l))){
+                l++;
                 continue;
             }
-            if(!Character.isLetterOrDigit(right_char)) {
-                right--;
+            // if the right character is not alphanumeric then decrement right
+            if (!Character.isLetterOrDigit(s.charAt(r))){
+                r--;
                 continue;
             }
-            if (left_char == right_char){
-                left++;
-                right--;
-                continue;
+            if (Character.toLowerCase(s.charAt(l)) != Character.toLowerCase(s.charAt(r))){
+                return false;
             }
-            return false;
+            l++; r--;
         }
         return true;
     }

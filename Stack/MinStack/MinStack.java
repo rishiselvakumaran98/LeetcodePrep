@@ -1,30 +1,24 @@
 package Stack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
 public class MinStack {
     // Creating a stack of list of integers.
-    private Stack<List<Integer>> st;
-    private List<Integer> newComb;
+    public Stack<List<Integer>> st;
     public MinStack() {
         st = new Stack<>();
     }
     
     public void push(int val) {
-        newComb = new ArrayList<>();
-        if(st.size() < 1){
-            newComb.add(val); // [val, val]
-            newComb.add(val);
+        if (st.isEmpty()){
+            st.push(Arrays.asList(val, val));
+        } else {
+            int minVal = Math.min(st.peek().get(0), val);
+            st.push(Arrays.asList(minVal, val));
         }
-        else{
-            newComb.add(val);
-            newComb.add(Math.min(val, getMin()));
-        }
-        st.add(newComb);
-        return;
-
     }
     
     public void pop() {
@@ -32,10 +26,50 @@ public class MinStack {
     }
     
     public int top() {
-        return st.peek().get(0);
+        return st.peek().get(1);
     }
     
     public int getMin() {
-        return st.peek().get(1);
+        return st.peek().get(0);
+    }
+}
+
+class MinStack2 {
+    // Creating a stack of list of integers.
+    public Node head;
+    public MinStack2() {
+        
+    }
+    
+    public void push(int val) {
+        if (head == null){
+            head = new Node(val, val, null);
+        } else {
+            head = new Node(Math.min(head.minVal, val), val, head);
+        }
+    }
+    
+    public void pop() {
+        head = head.next;
+    }
+    
+    public int top() {
+        return head.val;
+    }
+    
+    public int getMin() {
+        return head.minVal;
+    }
+
+    private class Node {
+        int val;
+        int minVal;
+        Node next;
+
+        private Node(int minVal, int val, Node next){
+            this.val = val;
+            this.minVal = minVal;
+            this.next = next;
+        }
     }
 }

@@ -3,7 +3,7 @@ from typing import List
 class KthLargest:
 
     def __init__(self, k: int, nums: List[int]):
-        # initialize a heap to copy of the List
+        # initialize a heap to copy over the List
         self.k = k
         self.stream = nums
         heapq.heapify(self.stream)
