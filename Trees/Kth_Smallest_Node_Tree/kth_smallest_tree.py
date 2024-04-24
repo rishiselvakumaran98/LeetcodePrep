@@ -17,6 +17,22 @@ class Solution:
             return inOrderTraversal(root.left) + [root.val] + inOrderTraversal(root.right) if root else []
         res = inOrderTraversal(root)
         return res[k-1]
+    
+    def kthSmallestOptimizedApproach(self, root: Optional[TreeNode], k: int) -> int:
+        curr = root
+        stack = []
+
+        while True:
+            while curr:
+                stack.append(curr)
+                curr = curr.left
+            curr = stack.pop()
+            k -= 1
+            if not k:
+                return curr.val
+            curr = curr.right
+        
+
     # solve the question the most brute force way
     def kthSmallestUnOptimized(self, root: Optional[TreeNode], k: int) -> int:
         res = []
