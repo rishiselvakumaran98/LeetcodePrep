@@ -3,42 +3,62 @@ class Solution:
         """
         Do not return anything, modify board in-place instead.
         """
-        
-        # If we meet all the three requirements we add a number to the board
-        # Then we move tro the next state and keep repeating for numbers 1-9
-        # we need to declare data structures that we can dynamically add and use to check if the coordinates exist in O(1) time
-        rows, cols, subgrids = defaultdict(set), defaultdict(set), defaultdict(set)
-        q = []
-        
-        for r in range(9):
-            for c in range(9):
-                if board[r][c] != ".":
-                    rows[r].add(board[r][c])
-                    cols[c].add(board[r][c])
-                    subgrids[(r//3, c//3)].add(board[r][c])
-                else: # we add the empty spots to the queue to be used later when processing
-                    q.append((r,c))
+        rowVisited, colVisited, subGrid = defaultdict(set), defaultdict(set), defaultdict(set)
+        ROWS, COLS = len(board), len(board[0])
+        # prepopulate the Visited sets with the existing cell values
+        for r in range(ROWS):
+            for c in range(COLS):
+                cell = board[r][c]
+                if cell != ".":
+                    box_value = (r//3)*3 + (c//3)
+                    rowVisited[r].add(cell)
+                    colVisited[c].add(cell)
+                    subGrid[box_value].add(cell)
 
-        
-        def backtrack():
-            if not q:
+
+        def isValid(r, c, value):
+            box_value = (r//3)*3 + c//3
+            return value not in rowVisited[r] and value not in colVisited[c] and value not in subGrid[box_value]
+
+        def solve(r, c):
+            # Goal: If we reach the end of row or col then we return back from the function call
+            # we check only for roww as row -1 as we are incrementing it below and need to prevent 
+            # index outofbounds exception
+            if r == ROWS-1 and c == COLS:
                 return True
-            r,c = q.pop()
-            b = (r//3, c//3)
-            for num in range(1,10):
-                num = str(num)
-                if num not in rows[r] and num not in cols[c] and num not in subgrids[b]:
-                    board[r][c] = num
-                    rows[r].add(num)
-                    cols[c].add(num)
-                    subgrids[b].add(num)
-                    if backtrack():
+            # If we simpily reached end of col then we increment the row to move to the next
+            elif c == COLS:
+                c = 0
+                r += 1
+            # if the current grid is already filled then move to the next state
+            if board[r][c] != ".":
+                return solve(r,c+1)
+            box_value = (r//3)*3 + c//3
+            # We Make the choice to add the coordinate into the board
+            
+            for value in range(1, ROWS+1):
+                # we check if the particular value can be placed in the cell
+                value = str(value)
+                if isValid(r, c, value):
+                    board[r][c] = value
+                    rowVisited[r].add(value)
+                    colVisited[c].add(value)
+                    subGrid[box_value].add(value)
+                
+                    if solve(r,c+1):
                         return True
+
+                    # backtrack on the solution
                     board[r][c] = "."
-                    rows[r].remove(num)
-                    cols[c].remove(num)
-                    subgrids[b].remove(num)
-            q.append((r,c))
+                    rowVisited[r].remove(value)
+                    colVisited[c].remove(value)
+                    subGrid[box_value].remove(value)
+
             return False
-        
-        backtrack()
+        solve(0,0)
+
+
+
+
+
+

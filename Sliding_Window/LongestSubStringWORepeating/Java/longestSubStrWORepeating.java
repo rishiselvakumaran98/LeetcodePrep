@@ -1,4 +1,4 @@
-package Sliding_Window.LongestSubStringWORepeating;
+package Sliding_Window.LongestSubStringWORepeating.Java;
 
 import java.util.HashMap;
 import java.util.HashSet;
